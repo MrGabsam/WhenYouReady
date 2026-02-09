@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>WhenYou’reReady — Vault Sealed</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;650;800;900&display=swap" rel="stylesheet">
+
+<meta name="theme-color" content="#0b1020">
+<style>
+:root{
+  --bg:#070A12;
+  --bg2:#0b1020;
+  --card:rgba(255,255,255,.06);
+  --card2:rgba(255,255,255,.10);
+  --ink:#F5F7FF;
+  --muted:rgba(245,247,255,.72);
+  --muted2:rgba(245,247,255,.55);
+  --line:rgba(255,255,255,.12);
+  --shadow:0 34px 110px rgba(0,0,0,.60);
+  --r:26px;
+
+  --accent:#FF4D7D;
+  --accent2:#6D5BFF;
+  --accent3:#00D3A7;
+
+  --ok:#19c37d;
+  --warn:#ffcc00;
+  --bad:#ff4d4d;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  color:var(--ink);
+  background:
+    radial-gradient(1200px 900px at 20% 10%, rgba(255,77,125,.18), transparent 60%),
+    radial-gradient(1000px 800px at 75% 20%, rgba(109,91,255,.18), transparent 55%),
+    radial-gradient(900px 700px at 55% 85%, rgba(0,211,167,.14), transparent 60%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:22px;
+  text-align:center;
+}
+
+.wrap{width:min(860px,100%)}
+
+.card{
+  background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:28px;
+  padding:22px;
+  box-shadow:var(--shadow);
+  animation:pop .25s ease forwards;
+}
+
+@keyframes pop{
+  from{opacity:0;transform:translateY(10px) scale(.99)}
+  to{opacity:1;transform:none}
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  font-weight:900;
+  margin-bottom:10px;
+}
+.logo{
+  width:38px;height:38px;border-radius:12px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  box-shadow:0 14px 40px rgba(255,77,125,.16);
+}
+.pill{
+  display:inline-flex;gap:8px;align-items:center;
+  padding:9px 12px;border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.06);
+  border-radius:999px;
+  color:var(--muted);
+  font-weight:900;font-size:12px;
+  backdrop-filter: blur(10px);
+  margin-top:8px;
+}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px rgba(255,77,125,.12)}
+
+.h1{
+  margin:10px 0 0;
+  font-size:clamp(26px,4vw,42px);
+  font-weight:900;
+  letter-spacing:-.03em;
+}
+.sub{
+  color:var(--muted);
+  margin-top:10px;
+  line-height:1.7;
+  font-weight:650;
+}
+
+.statusBox{
+  margin-top:16px;
+  padding:14px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(0,0,0,.22);
+  text-align:left;
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:10px 8px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.row:last-child{border-bottom:none}
+.k{color:var(--muted2);font-weight:800;font-size:12px;letter-spacing:.02em}
+.v{font-weight:900}
+
+.ok{color:var(--ok)}
+.warn{color:var(--warn)}
+.bad{color:var(--bad)}
+
+.spinner{
+  width:18px;height:18px;border-radius:50%;
+  border:3px solid rgba(255,255,255,.18);
+  border-top-color:rgba(255,255,255,.85);
+  display:inline-block;
+  animation:spin .8s linear infinite;
+  vertical-align:-4px;
+  margin-right:8px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.actions{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top:16px;
+}
+
+.btn{
+  border:none;
+  cursor:pointer;
+  padding:12px 16px;
+  border-radius:999px;
+  font-weight:950;
+  font-size:14px;
+  transition:transform .08s ease, filter .2s ease;
+}
+.btn:active{transform:translateY(1px)}
+
+.btn.primary{
+  background:linear-gradient(135deg,#FFD2DD,#FFFFFF);
+  color:#0b1020;
+  box-shadow:0 18px 44px rgba(255,77,125,.15);
+  border:1px solid rgba(255,255,255,.22);
+}
+.btn.ghost{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  color:var(--ink);
+}
+
+.footerNote{
+  margin-top:14px;
+  color:var(--muted2);
+  font-size:13px;
+  line-height:1.6;
+}
+.smallHint{
+  margin-top:10px;
+  color:var(--muted2);
+  font-size:12px;
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+  <div class="card">
+
+    <div class="brand"><div class="logo"></div><div>WhenYou’reReady</div></div>
+    <div class="pill"><span class="dot"></span><span>Vault status</span></div>
+
+    <h1 class="h1">✨ Vault sealed</h1>
+
+    <div class="sub">
+      If payment is confirmed, the recipient will automatically receive a secure vault link by email.
+      If they click early, they’ll see a locked vault + live countdown until your chosen time.
+    </div>
+
+    <div id="statusBox" class="statusBox">
+      <div class="row">
+        <div class="k">Payment</div>
+        <div class="v" id="payStatus"><span class="spinner"></span>Finalising…</div>
+      </div>
+      <div class="row">
+        <div class="k">Recipient Email</div>
+        <div class="v" id="emailStatus">—</div>
+      </div>
+      <div class="row">
+        <div class="k">Email Delivery</div>
+        <div class="v" id="mailStatus">—</div>
+      </div>
+      <div class="row">
+        <div class="k">Unlock Time</div>
+        <div class="v" id="unlockStatus">—</div>
+      </div>
+    </div>
+
+    <div class="smallHint" id="hint">
+      Tip: if this stays “Finalising…” for long, make sure Stripe webhooks are running in a second terminal.
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" onclick="location.href='/'">💌 Create another vault</button>
+      <button class="btn ghost" onclick="copyLink()">📤 Copy site link</button>
+    </div>
+
+    <div class="footerNote">
+      You can close this page any time — your vault is saved.
+      This page simply confirms payment + email delivery.
+    </div>
+
+  </div>
+</div>
+
+<script>
+const qs = new URLSearchParams(location.search);
+const sid = qs.get("session_id");
+
+const payStatus = document.getElementById("payStatus");
+const emailStatus = document.getElementById("emailStatus");
+const mailStatus = document.getElementById("mailStatus");
+const unlockStatus = document.getElementById("unlockStatus");
+const hint = document.getElementById("hint");
+
+function niceDate(iso){
+  if(!iso) return "—";
+  try{
+    const d = new Date(iso);
+    return d.toLocaleString(undefined, {
+      weekday:"short", year:"numeric", month:"short", day:"2-digit",
+      hour:"2-digit", minute:"2-digit"
+    });
+  }catch{
+    return iso;
+  }
+}
+
+function setText(el, text, cls){
+  el.className = "v " + (cls || "");
+  el.textContent = text;
+}
+
+async function poll(){
+  if(!sid){
+    payStatus.innerHTML = "";
+    setText(payStatus, "Missing session_id (invalid success URL).", "bad");
+    hint.textContent = "Go back and try checkout again.";
+    return;
+  }
+
+  try{
+    const r = await fetch("/api/confirm?session_id=" + encodeURIComponent(sid));
+    const d = await r.json().catch(()=> ({}));
+
+    if(!r.ok){
+      setText(payStatus, d.error || "Confirm failed.", "bad");
+      hint.textContent = "Check your server console. If using Stripe CLI, ensure it’s running.";
+      return;
+    }
+
+    // payment
+    if(d.paid){
+      setText(payStatus, "✅ Payment confirmed", "ok");
+      hint.textContent = "Nice — the vault is now active.";
+    }else{
+      payStatus.innerHTML = `<span class="spinner"></span>Finalising…`;
+      hint.textContent = "Waiting for Stripe confirmation (webhook).";
+    }
+
+    // email + unlock
+    setText(mailStatus, d.emailSent ? "📧 Sent" : "⏳ Pending", d.emailSent ? "ok" : "warn");
+    setText(unlockStatus, niceDate(d.deliverAt), "");
+
+    // we don’t currently return recipientEmail from /api/confirm
+    setText(emailStatus, "Sent to recipient email (hidden)", "");
+
+    // stop polling once confirmed + email sent
+    if(d.paid && d.emailSent){
+      return;
+    }
+
+    setTimeout(poll, 1800);
+  }catch(e){
+    setText(payStatus, "Network error. Is the server running?", "bad");
+    hint.textContent = "Open the site via http://localhost:3000 (not file://).";
+  }
+}
+
+poll();
+
+function copyLink(){
+  const url = location.origin;
+  navigator.clipboard.writeText(url).then(()=>{
+    alert("Copied ✅ Share your site link!");
+  }).catch(()=>{
+    prompt("Copy this link:", url);
+  });
+}
+</script>
+</body>
+</html>

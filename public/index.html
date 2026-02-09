@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>WhenYou’reReady</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+<meta name="theme-color" content="#0b1020">
+<meta name="mobile-web-app-capable" content="yes">
+
+<style>
+:root{
+  --bg:#050711;
+  --bg2:#0b1020;
+  --card:rgba(255,255,255,.06);
+  --card2:rgba(255,255,255,.10);
+  --ink:#F6F7FF;
+  --muted:rgba(246,247,255,.72);
+  --muted2:rgba(246,247,255,.55);
+  --line:rgba(255,255,255,.12);
+  --shadow:0 34px 110px rgba(0,0,0,.65);
+  --shadow2:0 18px 60px rgba(0,0,0,.55);
+  --r:26px;
+
+  --accent:#FF4D7D;
+  --accent2:#6D5BFF;
+  --accent3:#00D3A7;
+  --accent4:#FFC857;
+
+  --ok:#19c37d;
+  --warn:#ffcc00;
+  --bad:#ff4d4d;
+
+  --glass: rgba(255,255,255,.08);
+  --glass2: rgba(255,255,255,.05);
+  --glassBorder: rgba(255,255,255,.14);
+
+  --safeBottom: env(safe-area-inset-bottom, 0px);
+  --safeTop: env(safe-area-inset-top, 0px);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  color:var(--ink);
+  background:
+    radial-gradient(1200px 900px at 20% 10%, rgba(255,77,125,.20), transparent 60%),
+    radial-gradient(1000px 800px at 75% 18%, rgba(109,91,255,.18), transparent 55%),
+    radial-gradient(900px 700px at 55% 88%, rgba(0,211,167,.16), transparent 60%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ===== Ambient animated blobs ===== */
+.blobs{
+  position:fixed; inset:0; pointer-events:none; z-index:-1; overflow:hidden;
+}
+.blob{
+  position:absolute;
+  width:420px; height:420px; border-radius:50%;
+  filter: blur(45px);
+  opacity:.35;
+  animation: drift 10s ease-in-out infinite alternate;
+  transform: translate3d(0,0,0);
+}
+.blob.b1{left:-120px; top:-80px; background:rgba(255,77,125,.8); animation-duration:13s;}
+.blob.b2{right:-140px; top:60px; background:rgba(109,91,255,.8); animation-duration:15s;}
+.blob.b3{left:20%; bottom:-180px; background:rgba(0,211,167,.8); animation-duration:16s;}
+.blob.b4{right:10%; bottom:-220px; background:rgba(255,200,87,.7); animation-duration:18s;}
+@keyframes drift{
+  from{ transform: translate(-10px, -10px) scale(1); }
+  to{ transform: translate(30px, 25px) scale(1.08); }
+}
+
+/* ===== Layout ===== */
+.wrap{max-width:1120px;margin:auto;padding: calc(18px + var(--safeTop)) 16px calc(22px + var(--safeBottom));}
+
+/* ===== Top nav ===== */
+.nav{
+  position:sticky; top:0; z-index:50;
+  padding: 10px 0;
+  backdrop-filter: blur(14px);
+}
+.navInner{
+  border:1px solid rgba(255,255,255,.12);
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+  border-radius: 999px;
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 10px 12px;
+  box-shadow: var(--shadow2);
+}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:-.02em}
+.logo{
+  width:38px;height:38px;border-radius:13px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  box-shadow:0 18px 55px rgba(255,77,125,.18);
+  position:relative;
+  overflow:hidden;
+}
+.logo:after{
+  content:"";
+  position:absolute; inset:-40%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,.35), transparent);
+  transform: rotate(25deg);
+  animation: shine 2.6s ease-in-out infinite;
+  opacity:.55;
+}
+@keyframes shine{
+  from{ transform:translateX(-40%) rotate(25deg); }
+  to{ transform:translateX(40%) rotate(25deg); }
+}
+.navRight{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.pill{
+  display:inline-flex;gap:8px;align-items:center;
+  padding:9px 12px;border:1px solid rgba(255,255,255,.14);
+  background:rgba(0,0,0,.16);
+  border-radius:999px;
+  color:var(--muted);
+  font-weight:900;font-size:12px;
+}
+.dot{
+  width:9px;height:9px;border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 0 6px rgba(255,77,125,.12);
+}
+.miniBtn{
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);
+  color:var(--ink);
+  border-radius:999px;
+  padding:10px 12px;
+  cursor:pointer;
+  font-weight:900;
+  transition: transform .12s ease, background .2s ease, border-color .2s ease;
+  display:inline-flex; align-items:center; gap:8px;
+}
+.miniBtn:hover{transform: translateY(-1px); background:rgba(255,255,255,.09)}
+.miniBtn:active{transform: translateY(0px)}
+
+/* ===== Hero ===== */
+.hero{
+  margin-top:14px;
+  border-radius:28px;
+  padding:22px;
+  border:1px solid rgba(255,255,255,.12);
+  background:linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.05));
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero:before{
+  content:"";
+  position:absolute; inset:-2px;
+  background: radial-gradient(700px 500px at 10% 10%, rgba(255,77,125,.22), transparent 55%),
+              radial-gradient(600px 450px at 90% 12%, rgba(109,91,255,.20), transparent 55%),
+              radial-gradient(600px 500px at 60% 90%, rgba(0,211,167,.18), transparent 60%);
+  opacity:.8;
+  pointer-events:none;
+}
+.hero > *{position:relative}
+
+.kicker{
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  color:var(--muted);
+  font-weight:800;
+}
+.badge{
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(0,0,0,.16);
+  padding:8px 10px;
+  border-radius:999px;
+  display:inline-flex; gap:8px; align-items:center;
+  font-size:12px;
+}
+.spark{
+  width:16px;height:16px;border-radius:6px;
+  background: linear-gradient(135deg, var(--accent3), var(--accent2));
+  box-shadow: 0 10px 30px rgba(0,211,167,.15);
+}
+.hero h1{
+  font-size:clamp(30px,5vw,56px);
+  margin:12px 0 0;
+  letter-spacing:-.05em;
+  line-height:1.05;
+}
+.hero p{
+  max-width:760px;
+  color:var(--muted);
+  line-height:1.7;
+  font-weight:650;
+  margin:10px 0 0;
+}
+.heroGrid{
+  display:grid;
+  grid-template-columns: 1.25fr .75fr;
+  gap:14px;
+  margin-top:16px;
+}
+@media(max-width:920px){ .heroGrid{grid-template-columns:1fr} }
+
+.featureCard{
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.18);
+  border-radius: 22px;
+  padding: 14px;
+}
+.featureRow{
+  display:flex; gap:10px; align-items:flex-start;
+  padding:10px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.04);
+  margin-top:10px;
+}
+.featureRow:first-child{margin-top:0}
+.ic{
+  width:34px; height:34px; border-radius:14px;
+  background: linear-gradient(135deg, rgba(255,77,125,.20), rgba(109,91,255,.16));
+  border:1px solid rgba(255,255,255,.12);
+  display:grid; place-items:center;
+  font-weight:1000;
+}
+.featureRow b{display:block}
+.featureRow span{display:block;color:var(--muted);font-weight:650;margin-top:3px;line-height:1.55}
+
+.actions{margin-top:14px;display:flex;gap:12px;flex-wrap:wrap}
+.btn{
+  border:none;
+  border-radius:999px;
+  padding:14px 18px;
+  font-weight:1000;
+  cursor:pointer;
+  transition:transform .12s ease, filter .2s ease, opacity .2s ease, box-shadow .25s ease;
+  display:inline-flex; align-items:center; gap:10px;
+}
+.btn:active{transform:translateY(1px)}
+.btn[disabled]{opacity:.65;cursor:not-allowed}
+.btn.primary{
+  background:linear-gradient(135deg,#FFD2DD,#FFFFFF);
+  color:#0b1020;
+  box-shadow:0 20px 60px rgba(255,77,125,.16);
+  border:1px solid rgba(255,255,255,.22);
+}
+.btn.primary:hover{ box-shadow:0 26px 80px rgba(255,77,125,.22); }
+.btn.secondary{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  color:var(--ink);
+}
+.btn.secondary:hover{background:rgba(255,255,255,.09)}
+.subtle{
+  font-size:12px;color:var(--muted2);font-weight:650;margin-top:10px
+}
+
+/* ===== Modal ===== */
+.modalBack{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.58);
+  backdrop-filter:blur(14px);
+  display:none;
+  place-items:center;
+  z-index:100;
+  padding:14px;
+}
+.modal{
+  width:min(1040px,100%);
+  max-height:92vh;
+  overflow:auto;
+  border-radius:28px;
+  border:1px solid rgba(255,255,255,.12);
+  background:linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.05));
+  box-shadow:0 30px 100px rgba(0,0,0,.62);
+  animation:pop .18s ease forwards;
+}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.99)}to{opacity:1;transform:none}}
+.modalHead{
+  padding:14px 16px;
+  border-bottom:1px solid rgba(255,255,255,.12);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+.steps{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.stepChip{
+  padding:7px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:1000;
+  border:1px solid rgba(255,255,255,.12);
+  color:var(--muted);
+  background:rgba(255,255,255,.03);
+  display:inline-flex; align-items:center; gap:8px;
+}
+.stepChip .n{
+  width:18px;height:18px;border-radius:7px;
+  display:grid;place-items:center;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.10);
+  font-size:11px;
+}
+.stepChip.on{
+  background:linear-gradient(135deg, rgba(255,77,125,.20), rgba(109,91,255,.16));
+  color:var(--ink);
+  border-color: rgba(255,255,255,.18);
+}
+.close{
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);
+  font-size:18px;cursor:pointer;color:var(--ink);
+  width:40px;height:40px;border-radius:999px;
+}
+.close:hover{background:rgba(255,255,255,.10)}
+.modalBody{padding:16px}
+
+/* ===== Form ===== */
+h2{
+  margin:0;letter-spacing:-.03em;line-height:1.1;
+}
+.note{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.05);
+  color:var(--muted);
+  font-weight:750;
+  line-height:1.6;
+}
+label{display:block;margin-top:12px;color:var(--muted);font-weight:900;font-size:12px;letter-spacing:.02em}
+input,select,textarea{
+  width:100%;
+  margin-top:8px;
+  padding:12px 12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(0,0,0,.22);
+  color:var(--ink);
+  outline:none;
+  font-weight:700;
+}
+small{color:var(--muted2);font-weight:700}
+
+/* Editor */
+.editorWrap{
+  margin-top:10px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;
+  overflow:hidden;
+  background:rgba(0,0,0,.22);
+}
+.editorBar{
+  display:flex;gap:8px; flex-wrap:wrap;
+  padding:10px;
+  border-bottom:1px solid rgba(255,255,255,.12);
+  align-items:center;
+}
+.editorBar button{
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.06);
+  color:var(--ink);
+  border-radius:12px;
+  padding:8px 10px;
+  cursor:pointer;
+  font-weight:1000;
+}
+.editorBar button:hover{background:rgba(255,255,255,.10)}
+.editor{
+  min-height:180px;
+  padding:14px;
+  outline:none;
+  line-height:1.8;
+}
+.previewImgs img{height:84px;border-radius:14px;margin-right:8px;border:1px solid rgba(255,255,255,.12)}
+.foot{
+  display:flex;justify-content:space-between;gap:10px;margin-top:16px;flex-wrap:wrap;
+  align-items:center;
+}
+.footRight{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.err{
+  margin-top:12px;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid rgba(255,77,125,.35);
+  background:rgba(255,77,125,.10);
+  color:rgba(255,255,255,.92);
+  font-weight:850;
+  display:none;
+}
+
+/* Plans & Pay */
+.grid3{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:12px;
+}
+@media(max-width:900px){ .grid3{grid-template-columns:1fr} }
+
+.choiceBtn{
+  text-align:left;
+  width:100%;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(0,0,0,.22);
+  color:var(--ink);
+  padding:14px;
+  cursor:pointer;
+  transition: transform .12s ease, background .2s ease, border-color .2s ease;
+}
+.choiceBtn:hover{transform: translateY(-1px)}
+.choiceBtn strong{display:block;font-size:14px}
+.choiceBtn .p{color:var(--muted);font-weight:750;margin-top:6px;line-height:1.5}
+.choiceBtn.on{
+  border-color:rgba(255,77,125,.35);
+  background:linear-gradient(135deg, rgba(255,77,125,.14), rgba(109,91,255,.10));
+}
+
+.payGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:10px;
+}
+@media(max-width:900px){ .payGrid{grid-template-columns:1fr} }
+.payBtn.on{
+  border-color:rgba(0,211,167,.35);
+  background:linear-gradient(135deg, rgba(0,211,167,.14), rgba(109,91,255,.10));
+}
+
+/* ===== Preview card ===== */
+.previewWrap{
+  display:grid;
+  grid-template-columns: 1fr .9fr;
+  gap:12px;
+  margin-top:12px;
+}
+@media(max-width:960px){ .previewWrap{grid-template-columns:1fr} }
+
+.previewPanel{
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.18);
+  border-radius: 22px;
+  padding: 14px;
+}
+.previewCard{
+  border-radius: 24px;
+  border:1px solid rgba(255,255,255,.14);
+  background:
+    radial-gradient(900px 420px at 10% 0%, rgba(255,77,125,.14), transparent 60%),
+    radial-gradient(700px 420px at 90% 0%, rgba(109,91,255,.14), transparent 60%),
+    radial-gradient(800px 520px at 60% 100%, rgba(0,211,167,.12), transparent 60%),
+    rgba(255,255,255,.05);
+  padding: 16px;
+  box-shadow: var(--shadow2);
+  position:relative;
+  overflow:hidden;
+}
+.previewCard:before{
+  content:"";
+  position:absolute; inset:-2px;
+  background: linear-gradient(90deg, rgba(255,77,125,.20), rgba(109,91,255,.18), rgba(0,211,167,.18));
+  opacity:.35;
+  filter: blur(18px);
+  animation: sheen 3.8s ease-in-out infinite alternate;
+}
+@keyframes sheen{
+  from{transform: translateX(-6px)}
+  to{transform: translateX(10px)}
+}
+.previewCard > *{position:relative}
+.pTitle{font-weight:950;letter-spacing:-.03em;font-size:18px;margin:0 0 6px}
+.pMeta{color:var(--muted);font-weight:750;font-size:12px;line-height:1.4}
+.pBody{
+  margin-top:10px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.20);
+  border-radius: 18px;
+  padding: 12px;
+  color: var(--ink);
+  line-height: 1.8;
+}
+.countRow{
+  margin-top:12px;
+  display:flex; gap:10px; flex-wrap:wrap;
+}
+.tBox{
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.05);
+  padding:10px 12px;
+  border-radius: 16px;
+  min-width: 90px;
+}
+.tBox b{display:block; font-size:18px; letter-spacing:-.03em}
+.tBox span{display:block; font-size:12px; color:var(--muted); font-weight:800; margin-top:2px}
+.previewActions{
+  display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  transform:translateX(-50%);
+  bottom: calc(18px + var(--safeBottom));
+  background: rgba(0,0,0,.65);
+  color: var(--ink);
+  border: 1px solid rgba(255,255,255,.16);
+  padding: 10px 12px;
+  border-radius: 999px;
+  font-weight:850;
+  backdrop-filter: blur(12px);
+  display:none;
+  z-index:200;
+  box-shadow: var(--shadow2);
+}
+
+/* ===== Mobile polish ===== */
+@media(max-width:640px){
+  .wrap{padding: calc(14px + var(--safeTop)) 12px calc(20px + var(--safeBottom))}
+  .hero{padding:18px}
+  .btn{width:100%;justify-content:center}
+  .navInner{border-radius: 22px}
+  .pill{display:none}
+  .miniBtn{padding:10px 12px}
+}
+
+/* ===== Print styles for Card ===== */
+@media print{
+  body{background:#fff;color:#111}
+  .nav,.hero,.modalBack,.toast,.blobs{display:none !important}
+  #printArea{display:block !important}
+}
+#printArea{display:none}
+.printCard{
+  width: 100%;
+  max-width: 800px;
+  margin: 30px auto;
+  border: 2px solid #111;
+  border-radius: 18px;
+  padding: 18px;
+  font-family: Inter, Arial, sans-serif;
+}
+.printCard h1{margin:0 0 8px;font-size:26px}
+.printCard .meta{font-size:13px;color:#333;margin-bottom:10px}
+.printCard .body{border:1px solid #333;border-radius:12px;padding:12px;line-height:1.8}
+.printCard .foot{margin-top:12px;font-size:12px;color:#333}
+</style>
+</head>
+
+<body>
+<div class="blobs" aria-hidden="true">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+  <div class="blob b4"></div>
+</div>
+
+<div class="wrap">
+  <div class="nav">
+    <div class="navInner">
+      <div class="brand" role="button" tabindex="0" onclick="location.href='/'" onkeydown="if(event.key==='Enter') location.href='/'">
+        <div class="logo" aria-hidden="true"></div>
+        <div>WhenYou’reReady</div>
+      </div>
+      <div class="navRight">
+        <div class="pill" title="Auto-detected based on your browser region"><span class="dot"></span><span id="curLabel">Detecting currency…</span></div>
+        <button class="miniBtn" onclick="openModal()"><span>💌</span> Create</button>
+        <button class="miniBtn" onclick="location.href='vault.html'"><span>🔓</span> Open</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="kicker">
+      <div class="badge"><span class="spark"></span><b>Sealed delivery</b> <span style="opacity:.8">•</span> <span>Live countdown lock</span></div>
+      <div class="badge">✅ Sends the vault link automatically after payment</div>
+    </div>
+
+    <h1>Send words that arrive at the perfect moment.</h1>
+    <p>
+      You create a vault in minutes. The recipient gets a link immediately — but the message stays locked behind a
+      live countdown until the unlock time you choose.
+    </p>
+
+    <div class="heroGrid">
+      <div class="featureCard">
+        <div class="featureRow">
+          <div class="ic">⏳</div>
+          <div>
+            <b>Locked until the exact second</b>
+            <span>If opened early, a cinematic countdown appears (days / hours / minutes / seconds).</span>
+          </div>
+        </div>
+        <div class="featureRow">
+          <div class="ic">✉️</div>
+          <div>
+            <b>Sent automatically</b>
+            <span>After payment, your system emails the recipient the vault link. (Email is the supported channel here.)</span>
+          </div>
+        </div>
+        <div class="featureRow">
+          <div class="ic">🪄</div>
+          <div>
+            <b>Premium preview + printable card</b>
+            <span>Before paying, preview exactly how it will look and print a keepsake card.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="featureCard">
+        <b style="display:block;letter-spacing:-.02em">Ready to seal a message?</b>
+        <div class="actions">
+          <button class="btn primary" onclick="openModal()">✨ Create a Vault</button>
+          <button class="btn secondary" onclick="location.href='vault.html'">Open a Vault</button>
+        </div>
+        <div class="subtle">
+          Tip: Schedule a specific time (e.g., <b>20:00</b>) — it feels intentional and gift-like.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modalBack" id="back" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Create a vault">
+    <div class="modalHead">
+      <div class="steps" aria-label="Steps">
+        <span class="stepChip on" id="s1"><span class="n">1</span> Moment</span>
+        <span class="stepChip" id="s2"><span class="n">2</span> Write</span>
+        <span class="stepChip" id="s3"><span class="n">3</span> Schedule</span>
+        <span class="stepChip" id="s4"><span class="n">4</span> Extras</span>
+        <span class="stepChip" id="s5"><span class="n">5</span> Preview & Pay</span>
+      </div>
+      <button class="close" onclick="closeModal()" aria-label="Close">✕</button>
+    </div>
+    <div class="modalBody" id="panel"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Print-only area -->
+<div id="printArea">
+  <div class="printCard">
+    <h1 id="prTitle">WhenYou’reReady</h1>
+    <div class="meta" id="prMeta"></div>
+    <div class="body" id="prBody"></div>
+    <div class="foot">Printed from WhenYou’reReady • Keep this card safe</div>
+  </div>
+</div>
+
+<script>
+/* ===========================
+   State + helpers
+=========================== */
+let step=1;
+let paying=false;
+let previewTimer=null;
+
+const FX = {
+  GBP:1, EUR:1.17, USD:1.27, CAD:1.72, AUD:1.95, NZD:2.10,
+  KES:200, NGN:2100, ZAR:24, INR:105, JPY:190, CHF:1.12,
+  SEK:13.0, NOK:13.5, DKK:8.7, AED:4.7, SAR:4.8,
+  SGD:1.7, MYR:6.0, PHP:70, IDR:20000
+};
+const PRICE_GBP = { basic:2.49, premium:4.99, legacy:8.99 };
+
+function guessCurrency(){
+  const loc = (navigator.language || "en-GB").toUpperCase();
+  const region = (loc.split("-")[1] || "GB");
+  const map = { GB:"GBP", US:"USD", KE:"KES", NG:"NGN", ZA:"ZAR", IN:"INR", EU:"EUR", FR:"EUR", DE:"EUR", ES:"EUR", IT:"EUR", IE:"EUR",
+                CA:"CAD", AU:"AUD", NZ:"NZD", JP:"JPY", CH:"CHF", SE:"SEK", NO:"NOK", DK:"DKK", AE:"AED", SA:"SAR", SG:"SGD", MY:"MYR", PH:"PHP", ID:"IDR" };
+  return map[region] || "GBP";
+}
+function convertFromGBP(gbp, cur){
+  const fx = FX[cur] || 1;
+  let v = gbp * fx;
+  const zeroDecimal = new Set(["JPY","KRW"]);
+  if (zeroDecimal.has(cur)){
+    v = Math.round(v/10)*10;
+    return v;
+  }
+  v = Math.max(0.99, v);
+  const floor = Math.floor(v);
+  const cents = v - floor;
+  const target = cents < 0.74 ? 0.49 : 0.99;
+  return floor + target;
+}
+function money(v, cur){
+  try{
+    return new Intl.NumberFormat(navigator.language || "en-GB", { style:"currency", currency:cur }).format(v);
+  }catch{
+    return `${cur} ${Number(v).toFixed(2)}`;
+  }
+}
+function toast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg;
+  t.style.display="block";
+  clearTimeout(t._to);
+  t._to=setTimeout(()=>t.style.display="none", 2200);
+}
+function showErr(msg){
+  const el = document.getElementById("errBox");
+  if(!el){ alert(msg); return; }
+  el.style.display="block";
+  el.textContent = msg;
+  el.scrollIntoView({behavior:"smooth", block:"nearest"});
+}
+function cmd(c){document.execCommand(c,false,null);}
+function safeTrim(x){ return String(x||"").trim(); }
+
+const state = {
+  recipientEmail:"",
+  recipientName:"",
+  senderName:"",
+  title:"",
+  content:"",
+  contentHTML:"",
+  theme:"valentine",
+  images:[],
+  voiceStyle:"",
+  audioBase64:"",
+  deliverAt:"",
+  deliverAtLocal:"",
+  plan:"basic",
+  currency: guessCurrency(),
+
+  // payment choice
+  paymentMethod:"card", // "card" or "mpesa"
+  mpesaPhone:""
+};
+
+document.getElementById("curLabel").textContent = `Currency: ${state.currency}`;
+
+/* ===========================
+   Draft autosave (localStorage)
+=========================== */
+const DRAFT_KEY="wyr_draft_v1";
+function saveDraft(){
+  try{
+    const minimal = {...state};
+    // images can be heavy — keep them, but cap to first 4 in draft
+    minimal.images = (minimal.images||[]).slice(0,4);
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(minimal));
+  }catch{}
+}
+function loadDraft(){
+  try{
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if(!raw) return;
+    const d = JSON.parse(raw);
+    Object.assign(state, d);
+  }catch{}
+}
+function clearDraft(){
+  try{ localStorage.removeItem(DRAFT_KEY); }catch{}
+}
+
+/* ===========================
+   Modal controls
+=========================== */
+function openModal(){
+  loadDraft();
+  document.getElementById("back").style.display="grid";
+  document.getElementById("back").setAttribute("aria-hidden","false");
+  render();
+  setTimeout(()=>toast("Draft restored (if available)"), 120);
+}
+function closeModal(){
+  stopPreviewTick();
+  document.getElementById("back").style.display="none";
+  document.getElementById("back").setAttribute("aria-hidden","true");
+}
+function go(n){
+  step=n;
+  ["s1","s2","s3","s4","s5"].forEach((id,i)=>{
+    document.getElementById(id).classList.toggle("on",i+1===step);
+  });
+  render();
+}
+document.addEventListener("keydown",(e)=>{
+  if(e.key==="Escape" && document.getElementById("back").style.display==="grid") closeModal();
+});
+
+/* ===========================
+   Theme decoration
+=========================== */
+function decorate(html){
+  if(state.theme==="romantic"){
+    return `<div style="font-family:Georgia,serif">${html}</div>`;
+  }
+  if(state.theme==="future"){
+    return `<div style="font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;letter-spacing:.02em">${html}</div>`;
+  }
+  return html;
+}
+
+/* ===========================
+   Preview countdown
+=========================== */
+function stopPreviewTick(){
+  if(previewTimer){ clearInterval(previewTimer); previewTimer=null; }
+}
+function tickPreview(){
+  const elDays=document.getElementById("pvDays");
+  if(!elDays) return;
+  const target = state.deliverAt ? new Date(state.deliverAt) : null;
+  const now = new Date();
+  let diff = target ? (target.getTime() - now.getTime()) : 0;
+  if(!target || isNaN(target.getTime())) diff = 0;
+
+  const locked = diff > 0;
+  if(!locked){
+    elDays.textContent="0";
+    document.getElementById("pvHours").textContent="0";
+    document.getElementById("pvMins").textContent="0";
+    document.getElementById("pvSecs").textContent="0";
+    const meta=document.getElementById("pvMeta");
+    if(meta) meta.textContent = "Unlock time reached (example preview).";
+    return;
+  }
+  const s = Math.floor(diff/1000);
+  const days = Math.floor(s/86400);
+  const hours = Math.floor((s%86400)/3600);
+  const mins = Math.floor((s%3600)/60);
+  const secs = s%60;
+
+  elDays.textContent=String(days);
+  document.getElementById("pvHours").textContent=String(hours);
+  document.getElementById("pvMins").textContent=String(mins);
+  document.getElementById("pvSecs").textContent=String(secs);
+
+  const meta=document.getElementById("pvMeta");
+  if(meta) meta.textContent = "Locked preview • This is what the recipient sees if they open early.";
+}
+function startPreviewTick(){
+  stopPreviewTick();
+  previewTimer=setInterval(tickPreview, 250);
+  tickPreview();
+}
+
+/* ===========================
+   Print card
+=========================== */
+function printCard(){
+  // build print area with current state
+  const title = safeTrim(state.title) || "A sealed message";
+  const to = safeTrim(state.recipientName) || safeTrim(state.recipientEmail) || "Recipient";
+  const from = safeTrim(state.senderName) || "Someone";
+  const when = state.deliverAt ? new Date(state.deliverAt).toLocaleString() : "Not set";
+
+  document.getElementById("prTitle").textContent = title;
+  document.getElementById("prMeta").textContent = `To: ${to} • From: ${from} • Unlocks: ${when}`;
+  document.getElementById("prBody").textContent = safeTrim(state.content) || "(Your message preview will appear here.)";
+
+  window.print();
+}
+
+/* ===========================
+   Render steps
+=========================== */
+function render(){
+  const p=document.getElementById("panel");
+  stopPreviewTick();
+
+  if(step===1){
+    p.innerHTML=`
+      <h2>Pick a moment</h2>
+      <div class="note">Choose a vibe to start fast — you can edit everything next. Your message stays locked until unlock time.</div>
+
+      <div class="grid3">
+        <button class="choiceBtn" onclick="state.title='Open this tonight…';state.contentHTML='<p>There\\'s something I want you to feel — exactly at the right time.</p>';saveDraft();go(2)">
+          <strong>💘 Valentine</strong>
+          <div class="p">Perfect for “Open this at 8pm”.</div>
+        </button>
+
+        <button class="choiceBtn" onclick="state.title='Open when you need this most…';state.contentHTML='<p>You have survived before. You will again.</p>';saveDraft();go(2)">
+          <strong>🌙 Support</strong>
+          <div class="p">For hard days, comfort, motivation.</div>
+        </button>
+
+        <button class="choiceBtn" onclick="state.title='Future you…';state.contentHTML='<p>Remember: you did not quit.</p>';saveDraft();go(2)">
+          <strong>🕰 Future Self</strong>
+          <div class="p">Journaling + growth moments.</div>
+        </button>
+      </div>
+
+      <div class="foot">
+        <div class="subtle">You can close anytime — your draft is auto-saved.</div>
+        <div class="footRight">
+          <button class="btn primary" onclick="saveDraft();go(2)">Continue →</button>
+        </div>
+      </div>
+    `;
+  }
+
+  if(step===2){
+    p.innerHTML=`
+      <h2>Write the vault</h2>
+      <div class="note">Make it personal. The recipient will only see the message after it unlocks.</div>
+
+      <div id="errBox" class="err"></div>
+
+      <label>Recipient email</label>
+      <input id="email" placeholder="name@email.com" value="${state.recipientEmail}" inputmode="email" autocomplete="email">
+
+      <label>Recipient name (optional)</label>
+      <input id="rname" placeholder="Mercy" value="${state.recipientName}" autocomplete="name">
+
+      <label>Your name (optional)</label>
+      <input id="sname" placeholder="Gabriel" value="${state.senderName}" autocomplete="name">
+
+      <label>Theme</label>
+      <select id="theme">
+        <option value="valentine">Valentine</option>
+        <option value="classic">Classic</option>
+        <option value="romantic">Romantic</option>
+        <option value="future">Futuristic</option>
+      </select>
+
+      <label>Title</label>
+      <input id="title" value="${state.title}" maxlength="140">
+
+      <label>Message</label>
+      <div class="editorWrap">
+        <div class="editorBar">
+          <button type="button" onclick="cmd('bold')"><b>B</b></button>
+          <button type="button" onclick="cmd('italic')"><i>I</i></button>
+          <button type="button" onclick="cmd('insertUnorderedList')">• List</button>
+          <button type="button" onclick="document.execCommand('formatBlock',false,'blockquote')">❝ Quote</button>
+          <button type="button" onclick="insertLine()">↵ Line</button>
+          <span style="margin-left:auto;color:var(--muted2);font-weight:850;font-size:12px">Tip: Click Preview later to see the final look.</span>
+        </div>
+        <div id="editor" class="editor" contenteditable="true">${state.contentHTML || "<p></p>"}</div>
+      </div>
+
+      <div class="foot">
+        <button class="btn secondary" onclick="saveDraft();go(1)">← Back</button>
+        <div class="footRight">
+          <button class="btn secondary" onclick="saveWrite(true)">Save Draft</button>
+          <button class="btn primary" onclick="saveWrite(false)">Continue →</button>
+        </div>
+      </div>
+    `;
+    document.getElementById("theme").value=state.theme;
+
+    // autosave on typing (light)
+    const ed = document.getElementById("editor");
+    ed.addEventListener("input", ()=>{
+      state.contentHTML = decorate(ed.innerHTML);
+      state.content = ed.innerText.trim();
+      saveDraft();
+    });
+  }
+
+  if(step===3){
+    const min = new Date(Date.now() + 2*60*1000);
+    const toLocal = (d)=>{
+      const pad=(n)=>String(n).padStart(2,"0");
+      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    };
+
+    p.innerHTML=`
+      <h2>Schedule the unlock</h2>
+      <div class="note">This is the exact time the vault opens. If the link is opened early, a live countdown appears.</div>
+
+      <label>Unlock date & time</label>
+      <input id="time" type="datetime-local" value="${state.deliverAtLocal || ""}" min="${toLocal(min)}">
+      <small>Minimum: 2 minutes from now (prevents instant unlock mistakes).</small>
+
+      <div class="foot">
+        <button class="btn secondary" onclick="saveDraft();go(2)">← Back</button>
+        <div class="footRight">
+          <button class="btn primary" onclick="saveTime()">Continue →</button>
+        </div>
+      </div>
+    `;
+  }
+
+  if(step===4){
+    p.innerHTML=`
+      <h2>Extras (optional)</h2>
+      <div class="note">Extras boost the “gift feel” without making the flow heavy.</div>
+
+      <label>Images (optional)</label>
+      <input type="file" multiple accept="image/*" onchange="addImages(event)">
+      <div class="previewImgs" id="imgs"></div>
+      <small>Tip: Images can be included in Premium/Legacy tiers (you control enforcement server-side).</small>
+
+      <label>Voice style (optional)</label>
+      <select id="voice" onchange="state.voiceStyle=this.value;saveDraft()">
+        <option value="">None</option>
+        <option ${state.voiceStyle==="Romantic"?"selected":""}>Romantic</option>
+        <option ${state.voiceStyle==="Male"?"selected":""}>Male</option>
+        <option ${state.voiceStyle==="Female"?"selected":""}>Female</option>
+        <option ${state.voiceStyle==="Child"?"selected":""}>Child</option>
+      </select>
+
+      <div class="foot">
+        <button class="btn secondary" onclick="saveDraft();go(3)">← Back</button>
+        <div class="footRight">
+          <button class="btn secondary" onclick="toast('Saved');saveDraft()">Save</button>
+          <button class="btn primary" onclick="saveDraft();go(5)">Preview & Pay →</button>
+        </div>
+      </div>
+    `;
+
+    // render existing images preview if any
+    const g=document.getElementById("imgs");
+    if(g && (state.images||[]).length){
+      g.innerHTML="";
+      state.images.slice(0,12).forEach(src=>{
+        const i=document.createElement("img");
+        i.src=src;
+        g.appendChild(i);
+      });
+    }
+  }
+
+  if(step===5){
+    const b = money(convertFromGBP(PRICE_GBP.basic, state.currency), state.currency);
+    const pz = money(convertFromGBP(PRICE_GBP.premium, state.currency), state.currency);
+    const l = money(convertFromGBP(PRICE_GBP.legacy, state.currency), state.currency);
+
+    const unlockTxt = state.deliverAt ? new Date(state.deliverAt).toLocaleString() : "Not set yet";
+    const toTxt = safeTrim(state.recipientName) || safeTrim(state.recipientEmail) || "Recipient";
+    const fromTxt = safeTrim(state.senderName) || "Someone";
+    const msgText = safeTrim(state.content) || "Write your message to see a preview here…";
+
+    p.innerHTML=`
+      <h2>Preview & Pay</h2>
+      <div class="note">Preview exactly how it will feel. Then choose payment method and we’ll send the vault link automatically.</div>
+
+      <div class="previewWrap">
+        <div class="previewPanel">
+          <b style="display:block;letter-spacing:-.02em">Live Preview</b>
+          <div style="margin-top:10px" class="previewCard" id="previewCard">
+            <div class="pMeta" id="pvMeta">Locked preview • This is what the recipient sees if they open early.</div>
+            <div class="pTitle">${escapeHtml(safeTrim(state.title) || "A sealed message")}</div>
+            <div class="pMeta">To: <b>${escapeHtml(toTxt)}</b> • From: <b>${escapeHtml(fromTxt)}</b></div>
+            <div class="pMeta" style="margin-top:4px">Unlocks: <b>${escapeHtml(unlockTxt)}</b></div>
+
+            <div class="countRow" aria-label="Countdown preview">
+              <div class="tBox"><b id="pvDays">0</b><span>Days</span></div>
+              <div class="tBox"><b id="pvHours">0</b><span>Hours</span></div>
+              <div class="tBox"><b id="pvMins">0</b><span>Minutes</span></div>
+              <div class="tBox"><b id="pvSecs">0</b><span>Seconds</span></div>
+            </div>
+
+            <div class="pBody">${escapeHtml(msgText).replace(/\n/g,"<br>")}</div>
+
+            <div class="previewActions">
+              <button class="btn secondary" type="button" onclick="copyPreviewLinkHint()">🔗 Explain recipient view</button>
+              <button class="btn secondary" type="button" onclick="printCard()">🖨️ Print Card</button>
+            </div>
+            <div class="subtle">Print Card creates a physical keepsake. (The actual vault still unlocks online.)</div>
+          </div>
+        </div>
+
+        <div class="previewPanel">
+          <b style="display:block;letter-spacing:-.02em">Payment</b>
+
+          <div id="errBox" class="err"></div>
+
+          <label>Method of payment</label>
+          <div class="payGrid">
+            <button class="choiceBtn payBtn ${state.paymentMethod==='card'?'on':''}" onclick="state.paymentMethod='card';saveDraft();render()">
+              <strong>💳 Card (Stripe)</strong>
+              <div class="p">Visa/Mastercard. Fast checkout.</div>
+            </button>
+            <button class="choiceBtn payBtn ${state.paymentMethod==='mpesa'?'on':''}" onclick="state.paymentMethod='mpesa';saveDraft();render()">
+              <strong>📱 M-Pesa (STK Push)</strong>
+              <div class="p">Prompt sent to phone — approve with PIN.</div>
+            </button>
+          </div>
+
+          ${state.paymentMethod==='mpesa' ? `
+            <label>M-Pesa phone number</label>
+            <input id="mpesaPhone" placeholder="2547XXXXXXXX or 07XXXXXXXX" value="${escapeAttr(state.mpesaPhone)}" inputmode="tel" autocomplete="tel">
+            <small>Use a Safaricom M-Pesa active number. You’ll receive the prompt on this phone.</small>
+          ` : `
+            <div style="margin-top:10px">
+              <small>Stripe can also support Apple Pay / Google Pay when enabled in your Stripe settings.</small>
+            </div>
+          `}
+
+          <label>Pick a package</label>
+          <div class="grid3">
+            <button class="choiceBtn ${state.plan==='basic'?'on':''}" onclick="state.plan='basic';saveDraft();render()">
+              <strong>Basic — ${b}</strong>
+              <div class="p">Message + cinematic countdown.</div>
+            </button>
+            <button class="choiceBtn ${state.plan==='premium'?'on':''}" onclick="state.plan='premium';saveDraft();render()">
+              <strong>Premium — ${pz}</strong>
+              <div class="p">Images + more themes.</div>
+            </button>
+            <button class="choiceBtn ${state.plan==='legacy'?'on':''}" onclick="state.plan='legacy';saveDraft();render()">
+              <strong>Legacy — ${l}</strong>
+              <div class="p">Voice + keepsake feel.</div>
+            </button>
+          </div>
+
+          <div class="foot" style="margin-top:14px">
+            <button class="btn secondary" onclick="saveDraft();go(4)" ${paying?'disabled':''}>← Back</button>
+            <div class="footRight">
+              <button class="btn secondary" onclick="toast('Draft saved');saveDraft()" ${paying?'disabled':''}>Save</button>
+              <button class="btn primary" id="payBtn" onclick="pay()" ${paying?'disabled':''}>
+                ${paying ? "Processing…" : "Pay & Send"}
+              </button>
+            </div>
+          </div>
+
+          <div class="subtle">
+            After payment: recipient gets an email with the vault link. If they open early, they see countdown until unlock.
+          </div>
+        </div>
+      </div>
+    `;
+
+    startPreviewTick();
+  }
+}
+
+/* ===========================
+   Actions
+=========================== */
+function insertLine(){
+  document.execCommand("insertHTML", false, "<br><br>");
+}
+
+function saveWrite(justSave){
+  state.recipientEmail=safeTrim(document.getElementById("email").value);
+  state.recipientName=safeTrim(document.getElementById("rname").value);
+  state.senderName=safeTrim(document.getElementById("sname").value);
+
+  state.theme=document.getElementById("theme").value;
+  state.title=safeTrim(document.getElementById("title").value);
+
+  const ed=document.getElementById("editor");
+  state.contentHTML=decorate(ed.innerHTML);
+  state.content=ed.innerText.trim();
+
+  saveDraft();
+  if(justSave){ toast("Draft saved"); return; }
+
+  if(!state.recipientEmail) return showErr("Recipient email is required.");
+  if(!state.title) return showErr("Title is required.");
+  if(!state.content) return showErr("Message cannot be empty.");
+
+  go(3);
+}
+
+function saveTime(){
+  const v = document.getElementById("time").value;
+  if(!v) return alert("Please choose an unlock date & time.");
+  const d = new Date(v);
+  if(isNaN(d.getTime())) return alert("Invalid date/time. Please choose again.");
+
+  state.deliverAt = d.toISOString();
+  state.deliverAtLocal = v;
+  saveDraft();
+  go(4);
+}
+
+function addImages(e){
+  state.images=[];
+  const g=document.getElementById("imgs");
+  if(g) g.innerHTML="";
+  [...e.target.files].slice(0,12).forEach(f=>{
+    const r=new FileReader();
+    r.onload=()=>{
+      state.images.push(r.result);
+      saveDraft();
+      if(g){
+        const i=document.createElement("img");
+        i.src=r.result; g.appendChild(i);
+      }
+    };
+    r.readAsDataURL(f);
+  });
+}
+
+function copyPreviewLinkHint(){
+  toast("Recipient view: link opens a locked screen + countdown until unlock time.");
+}
+
+async function pay(){
+  try{
+    if(paying) return;
+    paying=true;
+    render();
+
+    if(!state.recipientEmail || !state.deliverAt || !state.title || !state.content){
+      paying=false; render();
+      return showErr("Missing details. Please check Email, Title, Message, and Unlock time.");
+    }
+
+    if(state.paymentMethod === "mpesa"){
+      const el = document.getElementById("mpesaPhone");
+      state.mpesaPhone = safeTrim(el ? el.value : state.mpesaPhone);
+      saveDraft();
+      if(!state.mpesaPhone){
+        paying=false; render();
+        return showErr("Enter your M-Pesa phone number (2547XXXXXXXX or 07XXXXXXXX).");
+      }
+    } else {
+      state.mpesaPhone = "";
+      saveDraft();
+    }
+
+    const payload = {
+      recipientEmail: state.recipientEmail,
+      recipientName: state.recipientName,
+      senderName: state.senderName,
+      title: state.title,
+      content: state.content,
+      contentHTML: state.contentHTML,
+      theme: state.theme,
+      images: state.images,
+      voiceStyle: state.voiceStyle,
+      audioBase64: state.audioBase64,
+      deliverAt: state.deliverAt,
+      plan: state.plan,
+
+      paymentMethod: state.paymentMethod,
+      mpesaPhone: state.mpesaPhone
+    };
+
+    const r=await fetch("/api/checkout",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(payload)
+    });
+
+    const d=await r.json().catch(()=> ({}));
+
+    if(!r.ok){
+      console.error("Checkout error:", d);
+      paying=false; render();
+      return showErr(d.error || "Checkout failed. Check server console.");
+    }
+
+    if(!d.url){
+      paying=false; render();
+      return showErr("Checkout URL missing. Check server logs.");
+    }
+
+    // after successful checkout creation, keep draft (optional) — but usually clear once redirected
+    // clearDraft();
+
+    location.href=d.url;
+  }catch(e){
+    console.error(e);
+    paying=false; render();
+    showErr("Network error. Make sure server is running and you're using the correct URL.");
+  }
+}
+
+/* ===========================
+   Small safety helpers
+=========================== */
+function escapeHtml(s){
+  return String(s||"")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+function escapeAttr(s){
+  return String(s||"").replace(/"/g,"&quot;");
+}
+
+/* ===========================
+   Initial render
+=========================== */
+render();
+</script>
+</body>
+</html>

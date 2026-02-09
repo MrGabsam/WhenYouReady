@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>WhenYou’reReady — Vault</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+<meta name="theme-color" content="#0b1020">
+<meta name="mobile-web-app-capable" content="yes">
+
+<style>
+:root{
+  --bg:#070A12;
+  --bg2:#0b1020;
+  --card:rgba(255,255,255,.06);
+  --card2:rgba(255,255,255,.10);
+  --ink:#F5F7FF;
+  --muted:rgba(245,247,255,.72);
+  --muted2:rgba(245,247,255,.55);
+  --line:rgba(255,255,255,.12);
+  --shadow:0 34px 110px rgba(0,0,0,.60);
+  --r:26px;
+
+  --accent:#FF4D7D;
+  --accent2:#6D5BFF;
+  --accent3:#00D3A7;
+
+  --ok:#19c37d;
+  --warn:#ffcc00;
+  --bad:#ff4d4d;
+
+  --focus: 0 0 0 4px rgba(255,77,125,.22);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  color:var(--ink);
+  background:
+    radial-gradient(1200px 900px at 20% 10%, rgba(255,77,125,.18), transparent 60%),
+    radial-gradient(1000px 800px at 75% 20%, rgba(109,91,255,.18), transparent 55%),
+    radial-gradient(900px 700px at 55% 85%, rgba(0,211,167,.14), transparent 60%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:18px;
+  padding-bottom: calc(18px + env(safe-area-inset-bottom));
+  overflow-x:hidden;
+}
+
+a{color:inherit}
+button:focus-visible, input:focus-visible {outline:none; box-shadow:var(--focus); border-color:rgba(255,77,125,.35)}
+::selection{background:rgba(255,77,125,.22)}
+
+.wrap{width:min(1100px, 100%)}
+
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;margin-bottom:14px;
+}
+.brand{
+  display:flex;align-items:center;gap:10px;
+  font-weight:900;letter-spacing:-.02em;
+}
+.logo{
+  width:38px;height:38px;border-radius:12px;
+  background:
+    radial-gradient(16px 16px at 30% 30%, rgba(255,255,255,.35), transparent 60%),
+    linear-gradient(135deg, var(--accent), var(--accent2));
+  box-shadow:0 14px 40px rgba(255,77,125,.16);
+  position:relative;
+}
+.logo:after{
+  content:"";
+  position:absolute;inset:1px;border-radius:12px;
+  background:rgba(0,0,0,.12);
+  mix-blend-mode:overlay;
+}
+
+.pill{
+  display:inline-flex;gap:8px;align-items:center;
+  padding:9px 12px;border:1px solid var(--line);
+  background:rgba(255,255,255,.06);
+  border-radius:999px;
+  color:var(--muted);
+  font-weight:900;
+  font-size:12px;
+  backdrop-filter: blur(10px);
+}
+.dot{
+  width:9px;height:9px;border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 0 5px rgba(255,77,125,.12);
+}
+.dot.ok{background:var(--ok); box-shadow:0 0 0 5px rgba(25,195,125,.12)}
+.dot.warn{background:var(--warn); box-shadow:0 0 0 5px rgba(255,204,0,.12)}
+.dot.bad{background:var(--bad); box-shadow:0 0 0 5px rgba(255,77,77,.12)}
+
+.card{
+  width:100%;
+  border-radius:var(--r);
+  border:1px solid rgba(255,255,255,.12);
+  background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  animation:pop .22s ease forwards;
+  position:relative;
+  isolation:isolate;
+}
+.card:before{
+  content:"";
+  position:absolute; inset:-2px;
+  background:
+    radial-gradient(800px 280px at 10% 0%, rgba(255,77,125,.12), transparent 70%),
+    radial-gradient(900px 340px at 90% 10%, rgba(109,91,255,.12), transparent 70%),
+    radial-gradient(800px 320px at 50% 110%, rgba(0,211,167,.10), transparent 70%);
+  pointer-events:none;
+  z-index:-1;
+  filter:saturate(1.1);
+}
+@keyframes pop{
+  from{opacity:0;transform:translateY(12px) scale(.99)}
+  to{opacity:1;transform:none}
+}
+
+.head{padding:18px 18px 0}
+.h1{
+  margin:0;
+  font-size:clamp(24px, 4.6vw, 46px);
+  font-weight:1000;
+  letter-spacing:-.04em;
+  line-height:1.08;
+}
+.sub{
+  margin:10px 0 0;
+  color:var(--muted);
+  line-height:1.7;
+  font-weight:700;
+}
+
+.banner{
+  margin-top:14px;
+  display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+}
+.badge{
+  display:inline-flex;gap:8px;align-items:center;
+  padding:10px 12px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);
+  font-weight:1000;font-size:12px;
+  backdrop-filter: blur(10px);
+}
+.badge.hot{
+  background:linear-gradient(135deg, rgba(255,77,125,.20), rgba(109,91,255,.16));
+  border-color:rgba(255,255,255,.16);
+}
+.badge .muted{color:var(--muted2);font-weight:900}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
+  padding:18px;
+}
+
+.stage{
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:14px;
+}
+@media(max-width:920px){ .stage{grid-template-columns:1fr;} }
+
+.panel{
+  border-radius:22px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.05);
+  padding:14px;
+  overflow:hidden;
+  position:relative;
+}
+.panel:before{
+  content:"";
+  position:absolute;inset:0;
+  background:radial-gradient(520px 220px at 18% 0%, rgba(255,77,125,.10), transparent 70%);
+  pointer-events:none;
+}
+.panelInner{position:relative}
+
+.lockWrap{
+  display:grid;
+  place-items:center;
+  padding:8px 0 0;
+  gap:10px;
+}
+
+.heroLockRow{
+  width:min(520px, 100%);
+  display:grid;
+  grid-template-columns: 170px 1fr;
+  gap:14px;
+  align-items:center;
+}
+@media(max-width:560px){ .heroLockRow{grid-template-columns:1fr; text-align:center;} }
+
+.ring{
+  width:170px; height:170px;
+  display:grid; place-items:center;
+  margin:auto;
+  position:relative;
+  filter:drop-shadow(0 0 26px rgba(255,77,125,.14));
+}
+.ring svg{width:100%;height:100%}
+.ring .center{
+  position:absolute; inset:0;
+  display:grid; place-items:center;
+  gap:6px;
+}
+.ring .center .tiny{
+  font-weight:1000; letter-spacing:.12em;
+  text-transform:uppercase;
+  color:rgba(245,247,255,.85);
+  font-size:11px;
+}
+.ring .center .big{
+  font-weight:1000;
+  font-size:18px;
+  letter-spacing:-.02em;
+  color:rgba(245,247,255,.95);
+}
+.ring .center .micro{
+  color:var(--muted2);
+  font-weight:800;
+  font-size:12px;
+}
+
+.timerBig{
+  font-size:clamp(22px, 3.8vw, 34px);
+  font-weight:1000;
+  letter-spacing:-.03em;
+  margin:0;
+}
+.timerSub{
+  color:var(--muted2);
+  font-weight:750;
+  line-height:1.6;
+  margin:6px 0 0;
+}
+
+.kv{
+  display:grid;
+  grid-template-columns:120px 1fr;
+  gap:10px;
+  margin-top:12px;
+  color:var(--muted);
+  font-weight:750;
+}
+.kv div:nth-child(odd){
+  color:rgba(245,247,255,.88);
+  font-weight:1000;
+}
+@media(max-width:520px){ .kv{grid-template-columns:1fr} }
+
+.btnRow{
+  display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;justify-content:center;
+}
+
+.btn{
+  border:none;cursor:pointer;
+  padding:12px 16px;border-radius:999px;
+  font-weight:1000;
+  letter-spacing:-.01em;
+  transition:transform .08s ease, filter .2s ease, background .2s ease, border .2s ease, opacity .2s ease;
+  user-select:none;
+  touch-action:manipulation;
+}
+.btn:active{transform:translateY(1px)}
+.btn[disabled]{opacity:.65;cursor:not-allowed}
+.btn.primary{
+  color:#0b1020;
+  background:linear-gradient(135deg, #FFD2DD, #FFFFFF);
+  border:1px solid rgba(255,255,255,.22);
+  box-shadow:0 18px 44px rgba(255,77,125,.15);
+}
+.btn.primary:hover{filter:brightness(1.03)}
+.btn.secondary{
+  color:var(--ink);
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  backdrop-filter: blur(10px);
+}
+.btn.secondary:hover{background:rgba(255,255,255,.08)}
+.btn.ghost{
+  color:rgba(245,247,255,.88);
+  background:rgba(0,0,0,.22);
+  border:1px solid rgba(255,255,255,.12);
+}
+.btn.ghost:hover{background:rgba(0,0,0,.28)}
+.btn.small{padding:10px 12px; font-size:13px}
+
+.splitBtns{
+  display:flex;gap:10px;flex-wrap:wrap;justify-content:center;
+}
+@media(max-width:520px){ .splitBtns .btn{width:100%} }
+
+.paper{
+  border-radius:22px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(0,0,0,.22);
+  padding:16px;
+  overflow:hidden;
+  position:relative;
+}
+.paper:before{
+  content:"";
+  position:absolute;inset:0;
+  background:
+    radial-gradient(650px 220px at 20% 0%, rgba(109,91,255,.14), transparent 70%),
+    radial-gradient(540px 220px at 80% 15%, rgba(0,211,167,.10), transparent 70%);
+  pointer-events:none;
+}
+.paperInner{position:relative}
+
+.msgTitle{
+  margin:0 0 8px;
+  font-weight:1000;letter-spacing:-.03em;
+  font-size:22px;
+}
+.content{
+  line-height:1.85;
+  color:rgba(245,247,255,.90);
+  font-size:16px;
+  font-weight:650;
+  word-break:break-word;
+}
+.content a{color:#fff;text-decoration:underline}
+.content img{max-width:100%;border-radius:14px}
+
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:10px;
+  margin-top:14px;
+}
+.gallery img{
+  width:100%;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.04);
+}
+
+.audio-box{
+  margin-top:14px;
+  padding:12px;
+  border-radius:18px;
+  border:1px solid rgba(255,77,125,.28);
+  background:rgba(255,77,125,.08);
+}
+.audio-box p{margin:0 0 8px;font-weight:1000}
+audio{width:100%}
+
+.fadeIn{animation:fade .55s ease forwards}
+@keyframes fade{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%);
+  padding:10px 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(0,0,0,.45);
+  color:var(--ink);
+  font-weight:900;
+  display:none;
+  backdrop-filter: blur(10px);
+  z-index:999;
+}
+
+.small{font-size:12px;color:var(--muted2);font-weight:750;line-height:1.6}
+.bad{color:var(--bad);font-weight:1000}
+.warn{color:var(--warn);font-weight:1000}
+.ok{color:var(--ok);font-weight:1000}
+
+/* Bottom action bar on mobile */
+.bottomBar{
+  position:fixed;
+  left:50%;
+  bottom:12px;
+  transform:translateX(-50%);
+  width:min(1100px, calc(100% - 24px));
+  padding:10px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(0,0,0,.40);
+  backdrop-filter: blur(14px);
+  display:none;
+  gap:10px;
+  z-index:50;
+}
+.bottomBar .btn{flex:1}
+@media(max-width:720px){ .bottomBar{display:flex} }
+
+/* Card designer (print-ready) */
+.cardMakerBack{
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.62);
+  backdrop-filter: blur(10px);
+  display:none;
+  place-items:center;
+  z-index:200;
+  padding:14px;
+}
+.cardMaker{
+  width:min(980px, 100%);
+  max-height:92vh;
+  overflow:auto;
+  border-radius:26px;
+  border:1px solid rgba(255,255,255,.14);
+  background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+  box-shadow:0 30px 90px rgba(0,0,0,.55);
+}
+.cardMakerHead{
+  padding:14px 16px;
+  border-bottom:1px solid rgba(255,255,255,.12);
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.cardMakerBody{padding:16px}
+.cardGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+@media(max-width:920px){ .cardGrid{grid-template-columns:1fr} }
+
+.cardPreview{
+  border-radius:22px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(0,0,0,.22);
+  overflow:hidden;
+  position:relative;
+}
+.cardPreview .paperLike{
+  padding:18px;
+  background:
+    radial-gradient(520px 240px at 10% 0%, rgba(255,77,125,.12), transparent 70%),
+    radial-gradient(520px 240px at 90% 10%, rgba(109,91,255,.12), transparent 70%),
+    rgba(0,0,0,.22);
+}
+.cardPreview h3{margin:0 0 8px; font-weight:1000; letter-spacing:-.03em}
+.cardPreview .cardText{color:rgba(245,247,255,.90); line-height:1.7; font-weight:650}
+.cardPreview .sig{margin-top:12px; color:var(--muted2); font-weight:900}
+.cardControls label{display:block;margin-top:10px;color:var(--muted);font-weight:900;font-size:12px;letter-spacing:.02em}
+.cardControls input, .cardControls select{
+  width:100%;
+  margin-top:8px;
+  padding:12px 12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(0,0,0,.22);
+  color:var(--ink);
+  outline:none;
+  font-weight:700;
+}
+.cardControls .row{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+@media(max-width:520px){ .cardControls .row{grid-template-columns:1fr} }
+
+/* Confetti (pure CSS) */
+.confetti{
+  pointer-events:none;
+  position:fixed; inset:0;
+  overflow:hidden;
+  z-index:120;
+  display:none;
+}
+.confetti i{
+  position:absolute;
+  top:-10%;
+  width:10px; height:18px;
+  border-radius:3px;
+  background:linear-gradient(135deg, rgba(255,77,125,.95), rgba(109,91,255,.95));
+  opacity:.95;
+  animation:fall 1.9s linear forwards;
+}
+.confetti i:nth-child(3n){ background:linear-gradient(135deg, rgba(0,211,167,.95), rgba(109,91,255,.95)); }
+.confetti i:nth-child(4n){ background:linear-gradient(135deg, rgba(255,204,0,.95), rgba(255,77,125,.95)); }
+@keyframes fall{
+  to{
+    transform:translateY(120vh) rotate(420deg);
+    opacity:1;
+  }
+}
+
+/* Print styles: print the keepsake card only */
+@media print{
+  body{background:#fff !important; color:#000 !important; padding:0 !important; display:block !important}
+  .topbar, .bottomBar, .toast, #lockedCard, #openCard, .confetti, .cardMakerBack{display:none !important}
+  #printCardOnly{display:block !important}
+  #printCardOnly .printWrap{padding:18mm}
+  #printCardOnly .printCard{
+    border:1px solid #ddd;
+    border-radius:14px;
+    padding:18mm;
+    font-family: Inter, Arial, sans-serif;
+  }
+  #printCardOnly h1{margin:0 0 6mm; font-size:20pt}
+  #printCardOnly .p{font-size:12pt; line-height:1.7}
+  #printCardOnly .sig{margin-top:10mm; font-weight:700}
+}
+
+/* Reduced motion support */
+@media(prefers-reduced-motion: reduce){
+  *{animation:none !important; transition:none !important; scroll-behavior:auto !important}
+}
+</style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand" role="link" tabindex="0" onclick="goHome()" onkeydown="if(event.key==='Enter')goHome()">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <div style="font-size:14px;opacity:.95">WhenYou’reReady</div>
+          <div style="font-size:12px;color:var(--muted2);font-weight:900">Vault</div>
+        </div>
+      </div>
+
+      <div class="pill" title="Vault status">
+        <span class="dot" id="statusDot" aria-hidden="true"></span>
+        <span id="topStatus">Loading…</span>
+      </div>
+    </div>
+
+    <!-- LOCKED STATE -->
+    <div class="card" id="lockedCard">
+      <div class="head">
+        <h1 class="h1">This message isn’t ready yet.</h1>
+        <p class="sub">
+          A vault was sealed for you. If you open early, it stays locked — because the timing is the gift.
+        </p>
+
+        <div class="banner">
+          <div class="badge hot" id="badge">🔒 Locked <span class="muted">• countdown running</span></div>
+          <div class="badge">⏳ Live timer + auto unlock</div>
+          <div class="badge">🗓 Add a reminder</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="stage">
+          <div class="panel">
+            <div class="panelInner">
+              <div class="lockWrap">
+
+                <div class="heroLockRow">
+                  <!-- Progress Ring -->
+                  <div class="ring" aria-label="Countdown ring">
+                    <svg viewBox="0 0 120 120" role="img" aria-label="Countdown progress">
+                      <defs>
+                        <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+                          <stop offset="0" stop-color="rgba(255,77,125,.95)"/>
+                          <stop offset="1" stop-color="rgba(109,91,255,.95)"/>
+                        </linearGradient>
+                      </defs>
+                      <circle cx="60" cy="60" r="48" stroke="rgba(255,255,255,.12)" stroke-width="10" fill="none"/>
+                      <circle id="ringProg" cx="60" cy="60" r="48"
+                        stroke="url(#g)" stroke-width="10" fill="none"
+                        stroke-linecap="round"
+                        stroke-dasharray="302" stroke-dashoffset="302"
+                        transform="rotate(-90 60 60)"/>
+                    </svg>
+                    <div class="center">
+                      <div class="tiny" id="lockTimerText">LOADING…</div>
+                      <div class="big" id="timerBig">—</div>
+                      <div class="micro" id="timerSub">Counting down to your unlock moment…</div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div style="font-weight:1000;letter-spacing:-.02em;font-size:16px">Remind me at unlock</div>
+                    <div class="small" style="margin-top:6px">
+                      You can add this to your calendar, or enable a browser notification.
+                      (Notifications may require this page to be open near the unlock time.)
+                    </div>
+
+                    <div class="splitBtns" style="margin-top:10px">
+                      <button class="btn primary" onclick="addToCalendar()">🗓 Add to calendar</button>
+                      <button class="btn secondary" id="notifyBtn" onclick="enableNotify()">🔔 Notify me</button>
+                      <button class="btn ghost" onclick="copyLink()">🔗 Copy link</button>
+                    </div>
+
+                    <div class="small" id="notifyHint" style="margin-top:10px"></div>
+                  </div>
+                </div>
+
+                <div class="btnRow" style="margin-top:8px">
+                  <button class="btn secondary" onclick="shareHome()">📤 Share WhenYou’reReady</button>
+                </div>
+
+                <div class="small" style="margin-top:8px;text-align:center">
+                  Tip: Leave this tab open near unlock for the smoothest “cinematic reveal”.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panelInner">
+              <div style="font-weight:1000;letter-spacing:-.02em">Vault details</div>
+
+              <div class="kv" id="kvLocked">
+                <div>Status</div><div id="kvStatus">Locked</div>
+                <div>Unlocks</div><div id="kvUnlock">—</div>
+                <div>Timezone</div><div id="kvTZ">—</div>
+              </div>
+
+              <div class="small" style="margin-top:10px">
+                If you open early, you’ll see the exact time remaining (days, hours, minutes, seconds).
+                When the time hits zero, the vault unlocks here.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPEN STATE -->
+    <div class="card" id="openCard" style="display:none">
+      <div class="head">
+        <h1 class="h1">🔓 Your vault has opened.</h1>
+        <p class="sub">Some words arrive at the right time.</p>
+
+        <div class="banner">
+          <div class="badge hot">💌 Delivered <span class="muted">• now unlocked</span></div>
+          <div class="badge">🖨 Create a keepsake card</div>
+          <div class="badge">🔗 Save / share</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="paper fadeIn">
+          <div class="paperInner">
+            <h2 class="msgTitle" id="title">Message</h2>
+            <div class="content" id="content"></div>
+
+            <div id="imageGallery" class="gallery"></div>
+
+            <div class="audio-box" id="audioBox" style="display:none">
+              <p>🎙 Voice Message</p>
+              <audio id="audioPlayer" controls></audio>
+            </div>
+
+            <div class="btnRow" style="margin-top:14px">
+              <button class="btn primary" onclick="openCardMaker()">🖨 Make a keepsake card</button>
+              <button class="btn secondary" onclick="copyLink()">🔗 Copy vault link</button>
+              <button class="btn ghost" onclick="shareHome()">📤 Share WhenYou’reReady</button>
+            </div>
+
+            <div class="small" style="margin-top:10px">
+              This vault is private. Sharing the homepage won’t reveal the message.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Mobile bottom bar -->
+  <div class="bottomBar" id="bottomBar">
+    <button class="btn secondary" onclick="copyLink()">🔗 Copy link</button>
+    <button class="btn primary" id="bottomAction" onclick="bottomAction()">🗓 Remind me</button>
+  </div>
+
+  <!-- Card Maker Modal -->
+  <div class="cardMakerBack" id="cardMakerBack" aria-hidden="true">
+    <div class="cardMaker" role="dialog" aria-modal="true" aria-label="Keepsake card maker">
+      <div class="cardMakerHead">
+        <div style="font-weight:1000;letter-spacing:-.02em">Keepsake Card</div>
+        <button class="btn secondary small" onclick="closeCardMaker()">✕ Close</button>
+      </div>
+      <div class="cardMakerBody">
+        <div class="cardGrid">
+          <div class="cardPreview" id="cardPreview">
+            <div class="paperLike" id="cardPreviewInner">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+                <div style="width:14px;height:14px;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent2)); box-shadow:0 10px 20px rgba(255,77,125,.14)"></div>
+                <div style="font-weight:1000">WhenYou’reReady</div>
+              </div>
+              <h3 id="cardTitle">Message</h3>
+              <div class="cardText" id="cardBody">—</div>
+              <div class="sig" id="cardSig"></div>
+            </div>
+          </div>
+
+          <div class="cardControls">
+            <div class="small">
+              Choose a style, adjust layout, then print or save as PDF from your print dialog.
+            </div>
+
+            <label>Card style</label>
+            <select id="cardStyle" onchange="applyCardStyle()">
+              <option value="aurora">Aurora</option>
+              <option value="romance">Romance</option>
+              <option value="midnight">Midnight</option>
+              <option value="mint">Mint</option>
+              <option value="classic">Classic Paper</option>
+            </select>
+
+            <div class="row">
+              <div>
+                <label>Title</label>
+                <input id="cardTitleIn" oninput="syncCard()" placeholder="Card title">
+              </div>
+              <div>
+                <label>Signature (optional)</label>
+                <input id="cardSigIn" oninput="syncCard()" placeholder="— From …">
+              </div>
+            </div>
+
+            <label>Message (shorten for card)</label>
+            <input id="cardBodyIn" oninput="syncCard()" placeholder="A shorter version for the card…">
+
+            <div class="splitBtns" style="margin-top:12px">
+              <button class="btn primary" onclick="printCard()">🖨 Print / Save PDF</button>
+              <button class="btn secondary" onclick="copyCardText()">📋 Copy card text</button>
+            </div>
+
+            <div class="small" style="margin-top:10px">
+              Pro tip: On mobile, choose “Save as PDF” in your print options.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confetti -->
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+  <!-- Hidden print-only card -->
+  <div id="printCardOnly" style="display:none">
+    <div class="printWrap">
+      <div class="printCard">
+        <h1 id="printTitle">Message</h1>
+        <div class="p" id="printBody">—</div>
+        <div class="sig" id="printSig"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Copied</div>
+
+<script>
+const token = new URLSearchParams(location.search).get("token");
+
+const lockedCard = document.getElementById("lockedCard");
+const openCard = document.getElementById("openCard");
+
+const topStatus = document.getElementById("topStatus");
+const statusDot = document.getElementById("statusDot");
+const badge = document.getElementById("badge");
+
+const lockTimerText = document.getElementById("lockTimerText");
+const timerBig = document.getElementById("timerBig");
+const timerSub = document.getElementById("timerSub");
+const ringProg = document.getElementById("ringProg");
+
+const kvUnlock = document.getElementById("kvUnlock");
+const kvTZ = document.getElementById("kvTZ");
+const kvStatus = document.getElementById("kvStatus");
+
+const titleEl = document.getElementById("title");
+const contentEl = document.getElementById("content");
+const imageGallery = document.getElementById("imageGallery");
+const audioBox = document.getElementById("audioBox");
+const audioPlayer = document.getElementById("audioPlayer");
+
+const toast = document.getElementById("toast");
+const bottomBar = document.getElementById("bottomBar");
+const bottomActionBtn = document.getElementById("bottomAction");
+const notifyBtn = document.getElementById("notifyBtn");
+const notifyHint = document.getElementById("notifyHint");
+
+const cardMakerBack = document.getElementById("cardMakerBack");
+const confetti = document.getElementById("confetti");
+
+// Card Maker fields
+const cardTitle = document.getElementById("cardTitle");
+const cardBody = document.getElementById("cardBody");
+const cardSig = document.getElementById("cardSig");
+const cardTitleIn = document.getElementById("cardTitleIn");
+const cardBodyIn = document.getElementById("cardBodyIn");
+const cardSigIn = document.getElementById("cardSigIn");
+const cardStyle = document.getElementById("cardStyle");
+const cardPreviewInner = document.getElementById("cardPreviewInner");
+const printTitle = document.getElementById("printTitle");
+const printBody = document.getElementById("printBody");
+const printSig = document.getElementById("printSig");
+
+// local reminder storage
+const REM_KEY = token ? `wyr_reminder_${token}` : null;
+let unlockISO = null;
+let unlockMs = null;
+let firstSeenUnlock = null;
+let opened = false;
+
+function showToast(text){
+  toast.textContent = text || "Copied";
+  toast.style.display = "block";
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(()=> toast.style.display="none", 1500);
+}
+
+function goHome(){
+  location.href = "/";
+}
+
+function pad(n){ return String(n).padStart(2,"0"); }
+function breakdown(ms){
+  if(ms < 0) ms = 0;
+  const s = Math.floor(ms/1000);
+  const m = Math.floor(s/60);
+  const h = Math.floor(m/60);
+  const d = Math.floor(h/24);
+  return { days:d, hours:h%24, minutes:m%60, seconds:s%60 };
+}
+function fmtDT(input){
+  if(!input) return "—";
+  try{
+    const d = new Date(input);
+    if(Number.isNaN(d.getTime())) return String(input);
+    return new Intl.DateTimeFormat(navigator.language || "en-GB", { dateStyle:"full", timeStyle:"short" }).format(d);
+  }catch{
+    return String(input);
+  }
+}
+function escapeHtml(s){
+  return String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+function setStatus(label, kind){
+  topStatus.textContent = label;
+  statusDot.className = "dot" + (kind ? " " + kind : "");
+}
+
+function updateTZ(){
+  try{
+    kvTZ.textContent = Intl.DateTimeFormat().resolvedOptions().timeZone || "Local";
+  }catch{
+    kvTZ.textContent = "Local";
+  }
+}
+
+function renderTimer(ms){
+  const b = breakdown(ms);
+  const line = `${b.days}D ${pad(b.hours)}:${pad(b.minutes)}:${pad(b.seconds)}`;
+  lockTimerText.textContent = ms > 0 ? "LOCKED" : "OPENING";
+  timerBig.textContent = line;
+
+  if(ms > 0){
+    timerSub.textContent = "Counting down to your unlock moment…";
+  } else {
+    timerSub.textContent = "Unlocking now…";
+  }
+
+  // ring progress (best-effort)
+  if(firstSeenUnlock){
+    const total = Math.max(1, firstSeenUnlock - Date.now()); // guard
+    const remaining = Math.max(0, ms);
+    const p = 1 - Math.min(1, remaining / total);
+    const C = 302;
+    ringProg.style.strokeDasharray = String(C);
+    ringProg.style.strokeDashoffset = String(C - (C * p));
+  }
+}
+
+function haptic(){
+  try{ if(navigator.vibrate) navigator.vibrate([20, 40, 20]); }catch{}
+}
+
+function makeConfetti(){
+  confetti.innerHTML = "";
+  const pieces = 40;
+  for(let i=0;i<pieces;i++){
+    const el = document.createElement("i");
+    const left = Math.random()*100;
+    const delay = Math.random()*0.25;
+    const dur = 1.6 + Math.random()*0.8;
+    const w = 8 + Math.random()*10;
+    const h = 10 + Math.random()*18;
+    el.style.left = left + "vw";
+    el.style.animationDelay = delay + "s";
+    el.style.animationDuration = dur + "s";
+    el.style.width = w + "px";
+    el.style.height = h + "px";
+    el.style.transform = `rotate(${Math.random()*180}deg)`;
+    confetti.appendChild(el);
+  }
+  confetti.style.display = "block";
+  setTimeout(()=> confetti.style.display="none", 2200);
+}
+
+async function copyLink(){
+  const url = location.href;
+  try{
+    await navigator.clipboard.writeText(url);
+    showToast("Vault link copied");
+  }catch(e){
+    prompt("Copy this link:", url);
+  }
+}
+
+async function shareHome(){
+  const url = location.origin;
+  const text = "Someone sent a timed message vault on WhenYou’reReady 💌 Locked countdown → cinematic reveal.";
+  try{
+    if(navigator.share){
+      await navigator.share({ title:"WhenYou’reReady", text, url });
+      return;
+    }
+  }catch(e){ /* fall back */ }
+
+  try{
+    await navigator.clipboard.writeText(url);
+    showToast("Homepage link copied 💜");
+  }catch(e){
+    prompt("Copy this link:", url);
+  }
+}
+
+/* -------- Remind Me (Calendar + Notifications) -------- */
+function buildICS(unlockDate){
+  const dt = new Date(unlockDate);
+  const pad2 = (n)=>String(n).padStart(2,"0");
+  const y = dt.getUTCFullYear();
+  const m = pad2(dt.getUTCMonth()+1);
+  const d = pad2(dt.getUTCDate());
+  const hh = pad2(dt.getUTCHours());
+  const mm = pad2(dt.getUTCMinutes());
+  const ss = pad2(dt.getUTCSeconds());
+  const start = `${y}${m}${d}T${hh}${mm}${ss}Z`;
+  // 10 min duration
+  const endDt = new Date(dt.getTime() + 10*60*1000);
+  const ey = endDt.getUTCFullYear();
+  const em = pad2(endDt.getUTCMonth()+1);
+  const ed = pad2(endDt.getUTCDate());
+  const eh = pad2(endDt.getUTCHours());
+  const emn = pad2(endDt.getUTCMinutes());
+  const es = pad2(endDt.getUTCSeconds());
+  const end = `${ey}${em}${ed}T${eh}${emn}${es}Z`;
+
+  const uid = (token || "vault") + "@whenyouready";
+  const url = location.href;
+
+  return [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//WhenYoureReady//Vault Reminder//EN",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
+    "BEGIN:VEVENT",
+    `UID:${uid}`,
+    `DTSTAMP:${start}`,
+    `DTSTART:${start}`,
+    `DTEND:${end}`,
+    "SUMMARY:WhenYou’reReady — Vault unlocks",
+    "DESCRIPTION:Your timed vault unlocks now. Open the link to view it.",
+    `URL:${url}`,
+    "BEGIN:VALARM",
+    "TRIGGER:-PT1M",
+    "ACTION:DISPLAY",
+    "DESCRIPTION:Vault unlocks in 1 minute.",
+    "END:VALARM",
+    "END:VEVENT",
+    "END:VCALENDAR"
+  ].join("\r\n");
+}
+
+function downloadFile(name, content, mime){
+  const blob = new Blob([content], { type: mime || "text/plain" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=> URL.revokeObjectURL(a.href), 1500);
+}
+
+function addToCalendar(){
+  if(!unlockISO){
+    showToast("Unlock time not loaded yet");
+    return;
+  }
+  const ics = buildICS(unlockISO);
+  downloadFile("WhenYoureReady-Vault-Reminder.ics", ics, "text/calendar;charset=utf-8");
+  showToast("Calendar file downloaded");
+}
+
+async function enableNotify(){
+  if(!unlockISO){
+    notifyHint.innerHTML = `<span class="warn">Unlock time not loaded yet.</span>`;
+    return;
+  }
+
+  if(!("Notification" in window)){
+    notifyHint.innerHTML = `<span class="warn">Notifications not supported in this browser.</span>`;
+    return;
+  }
+
+  try{
+    let perm = Notification.permission;
+    if(perm !== "granted"){
+      perm = await Notification.requestPermission();
+    }
+    if(perm !== "granted"){
+      notifyHint.innerHTML = `<span class="warn">Permission denied. Use “Add to calendar” instead.</span>`;
+      return;
+    }
+
+    // store preference
+    try{ localStorage.setItem(REM_KEY, "notify"); }catch{}
+
+    scheduleLocalNotification();
+    notifyHint.innerHTML = `<span class="ok">Notification armed.</span> We’ll try to alert you at unlock.`;
+    showToast("Reminder set");
+  }catch(e){
+    notifyHint.innerHTML = `<span class="warn">Could not enable notifications.</span>`;
+  }
+}
+
+function scheduleLocalNotification(){
+  if(!unlockISO) return;
+  const ms = new Date(unlockISO).getTime() - Date.now();
+  if(ms <= 0) return;
+
+  // browsers may throttle long timers; still best-effort
+  clearTimeout(scheduleLocalNotification._t);
+  scheduleLocalNotification._t = setTimeout(()=>{
+    try{
+      new Notification("WhenYou’reReady", {
+        body: "Your vault just unlocked. Tap to open it.",
+        tag: "wyr-vault",
+        renotify: true
+      });
+      haptic();
+    }catch{}
+  }, ms);
+}
+
+function bottomAction(){
+  // if unlocked, open card maker; else add to calendar
+  if(opened) openCardMaker();
+  else addToCalendar();
+}
+
+/* -------- Card Maker -------- */
+function openCardMaker(){
+  if(!opened) return;
+  cardMakerBack.style.display = "grid";
+  cardMakerBack.setAttribute("aria-hidden","false");
+
+  // prefill
+  cardTitleIn.value = (titleEl.textContent || "Message").slice(0, 60);
+  // use a short excerpt for card
+  const rawText = (contentEl.innerText || "").trim().replace(/\s+/g," ");
+  cardBodyIn.value = rawText.length > 180 ? rawText.slice(0, 177) + "…" : rawText || "—";
+  cardSigIn.value = ""; // optional; user can type
+
+  syncCard();
+  applyCardStyle();
+
+  // close on ESC
+  window.addEventListener("keydown", escCloseCardMaker);
+}
+function escCloseCardMaker(e){
+  if(e.key === "Escape") closeCardMaker();
+}
+function closeCardMaker(){
+  cardMakerBack.style.display = "none";
+  cardMakerBack.setAttribute("aria-hidden","true");
+  window.removeEventListener("keydown", escCloseCardMaker);
+}
+function syncCard(){
+  cardTitle.textContent = cardTitleIn.value || "Message";
+  cardBody.textContent = cardBodyIn.value || "—";
+  cardSig.textContent = cardSigIn.value ? ("— " + cardSigIn.value) : "";
+}
+function applyCardStyle(){
+  const v = cardStyle.value;
+
+  const styles = {
+    aurora: `
+      background:
+        radial-gradient(520px 240px at 10% 0%, rgba(255,77,125,.18), transparent 70%),
+        radial-gradient(520px 240px at 90% 10%, rgba(109,91,255,.18), transparent 70%),
+        radial-gradient(520px 240px at 50% 110%, rgba(0,211,167,.14), transparent 70%),
+        rgba(0,0,0,.22);
+      border:1px solid rgba(255,255,255,.12);
+    `,
+    romance: `
+      background:
+        radial-gradient(520px 240px at 10% 0%, rgba(255,77,125,.22), transparent 70%),
+        radial-gradient(520px 240px at 90% 10%, rgba(255,210,221,.18), transparent 70%),
+        rgba(0,0,0,.22);
+      border:1px solid rgba(255,77,125,.22);
+    `,
+    midnight: `
+      background:
+        radial-gradient(520px 240px at 50% 0%, rgba(109,91,255,.22), transparent 70%),
+        linear-gradient(180deg, rgba(0,0,0,.28), rgba(0,0,0,.18));
+      border:1px solid rgba(109,91,255,.20);
+    `,
+    mint: `
+      background:
+        radial-gradient(520px 240px at 20% 0%, rgba(0,211,167,.20), transparent 70%),
+        radial-gradient(520px 240px at 90% 10%, rgba(109,91,255,.14), transparent 70%),
+        rgba(0,0,0,.22);
+      border:1px solid rgba(0,211,167,.18);
+    `,
+    classic: `
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      border:1px solid rgba(255,255,255,.18);
+    `
+  };
+
+  cardPreviewInner.setAttribute("style", (cardPreviewInner.getAttribute("style")||"") + ";" + (styles[v] || styles.aurora));
+}
+
+async function copyCardText(){
+  const text = `${cardTitle.textContent}\n\n${cardBody.textContent}\n\n${cardSig.textContent}`.trim();
+  try{
+    await navigator.clipboard.writeText(text);
+    showToast("Card text copied");
+  }catch{
+    prompt("Copy card text:", text);
+  }
+}
+
+function printCard(){
+  // populate print-only template
+  printTitle.textContent = cardTitle.textContent || "Message";
+  printBody.textContent = cardBody.textContent || "—";
+  printSig.textContent = cardSig.textContent || "";
+
+  // trigger print (user can save as PDF)
+  window.print();
+}
+
+/* -------- Open content rendering -------- */
+function setOpenUI(data){
+  opened = true;
+  bottomActionBtn.textContent = "🖨 Keepsake Card";
+  setStatus("Unlocked", "ok");
+  kvStatus.textContent = "Unlocked";
+  badge.innerHTML = `🔓 Open <span class="muted">• now</span>`;
+
+  lockedCard.style.display = "none";
+  openCard.style.display = "block";
+
+  titleEl.textContent = data.title || "Message";
+
+  // Prefer HTML if provided (your backend encrypts/stores your editor HTML)
+  // If you later want strict sanitizing, do it server-side.
+  contentEl.innerHTML = data.contentHTML || escapeHtml(data.content || "");
+
+  // Images: can be base64 data URLs or URLs
+  imageGallery.innerHTML = "";
+  if(Array.isArray(data.images) && data.images.length){
+    imageGallery.innerHTML = data.images
+      .slice(0, 24)
+      .map(url => `<img src="${escapeHtml(url)}" alt="Vault image">`)
+      .join("");
+  }
+
+  // Audio: your backend returns audioBase64 (not audioUrl)
+  audioBox.style.display = "none";
+  audioPlayer.removeAttribute("src");
+  if(data.audioBase64){
+    audioBox.style.display = "block";
+    // data.audioBase64 may already be a data URL; if it's raw base64, wrap it.
+    const s = String(data.audioBase64);
+    const src = s.startsWith("data:audio") ? s : `data:audio/mpeg;base64,${s}`;
+    audioPlayer.src = src;
+  }
+
+  haptic();
+  makeConfetti();
+}
+
+/* -------- Polling -------- */
+async function poll(){
+  if(!token){
+    setStatus("Invalid link", "bad");
+    badge.innerHTML = `⚠️ Invalid vault link`;
+    lockTimerText.textContent = "NOT FOUND";
+    timerBig.textContent = "NOT FOUND";
+    timerSub.innerHTML = `<span class="bad">Missing token</span>`;
+    bottomBar.style.display = "none";
+    return;
+  }
+
+  try{
+    const r = await fetch("/api/vault?token=" + encodeURIComponent(token), { cache:"no-store" });
+
+    // LOCKED
+    if(r.status === 403){
+      setStatus("Locked", "");
+      statusDot.className = "dot";
+      const data = await r.json();
+      unlockISO = data.deliverAt;
+      const unlockTime = new Date(unlockISO).getTime();
+      unlockMs = unlockTime - Date.now();
+
+      kvUnlock.textContent = fmtDT(unlockISO);
+      if(!firstSeenUnlock) firstSeenUnlock = unlockTime; // for ring
+
+      renderTimer(unlockMs);
+
+      // persist reminder preference
+      try{
+        if(REM_KEY && localStorage.getItem(REM_KEY)==="notify" && Notification.permission==="granted"){
+          scheduleLocalNotification();
+          notifyHint.innerHTML = `<span class="ok">Notification armed.</span>`;
+        }
+      }catch{}
+
+      // update mobile bar
+      bottomActionBtn.textContent = "🗓 Remind me";
+      bottomBar.style.display = "";
+
+      // smoother polling
+      const next = unlockMs < 2*60*1000 ? 1000 : 5000;
+      setTimeout(poll, next);
+      return;
+    }
+
+    // NOT FOUND / ERROR
+    if(!r.ok){
+      setStatus("Not found", "bad");
+      badge.innerHTML = `⚠️ Invalid vault link`;
+      lockTimerText.textContent = "NOT FOUND";
+      timerBig.textContent = "NOT FOUND";
+      timerSub.innerHTML = `<span class="bad">This vault link is invalid or expired.</span>`;
+      bottomBar.style.display = "none";
+      return;
+    }
+
+    // OPEN
+    const data = await r.json();
+    setStatus("Opening…", "ok");
+    statusDot.className = "dot ok";
+
+    // cinematic delay
+    setTimeout(()=> setOpenUI(data), 420);
+
+  }catch(err){
+    setStatus("Retrying…", "warn");
+    timerSub.innerHTML = `<span class="warn">Network issue. Retrying…</span>`;
+    statusDot.className = "dot warn";
+    setTimeout(poll, 2500);
+  }
+}
+
+/* -------- Boot -------- */
+updateTZ();
+setStatus("Loading…", "");
+statusDot.className = "dot";
+bottomBar.style.display = "";
+poll();
+</script>
+
+</body>
+</html>
