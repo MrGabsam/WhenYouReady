@@ -468,5 +468,27 @@
     "mpesaResultCode": null,
     "mpesaResultDesc": null,
     "stripeSessionId": "cs_test_a1xJKHFfldYuxtbaZoDWRxCCK9wYM3fUvvrKFTusUMM40vItkDd52yGNhx"
+  },
+  {
+    "id": "f0a63aa2dcf36d1556d8",
+    "token": "d3dfeae81e65721d31622605",
+    "recipientEmail": "gabrielmumo.gm@gmail.com",
+    "deliverAt": "2026-02-09T16:50:00.000Z",
+    "payload": "ZDvRDaHL4LX/ENAgZHyLMeT6x8RbJqoKf7Pnjkz+xNmZr05tSFPn98eXX8p8Qa7FUkqI2Dsurc+f7ktPw1dlcQ2PXXuyYDaQpT6CeM3nPskquPp29aZB2swQngLIlSj7M8/vXFsD8f2ACH8hu1wXfCJ7L/2FPf4KahlWmeVcoTnGgJ9PTAxEklKWqoZ5CUVFvrYTbES0e8HSAAx501z5IfiKTOIBWEMrCw/rs95CJu4QOwMe",
+    "images": [],
+    "audioBase64": null,
+    "plan": "premium",
+    "paid": false,
+    "paymentProvider": "stripe",
+    "createdAt": "2026-02-09T19:31:12.223Z",
+    "paidAt": null,
+    "initialEmailSentAt": null,
+    "mpesaCheckoutRequestID": null,
+    "mpesaMerchantRequestID": null,
+    "mpesaReceipt": null,
+    "mpesaPhone": null,
+    "mpesaResultCode": null,
+    "mpesaResultDesc": null,
+    "stripeSessionId": "cs_test_a10q5dnQavgvDOGEMvmUi4hehAr4nauQhthWesNC8v26A4ChbEAZQ37ETa"
   }
 ]
